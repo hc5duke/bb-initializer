@@ -26,7 +26,6 @@ puts dir
 
 system("mkdir #{dir}")
 tracks = `lsdvd /Volumes/#{dvd}`
-puts tracks
 
 tracks.split(/\n/).each do |track|
     matches = track.match(/Title: (\d+), Length: ([\d:\.]+)/)
@@ -47,6 +46,7 @@ tracks.split(/\n/).each do |track|
         filename = "S%02dE%02d" % [ssn, eps + track.to_i - 1] if ssn > 0 && eps > 0
         puts "Filename: #{filename}"
 
+        # Handbrake copies a track from the image
         cmd = [
             "handbrakecli",
                  "-t #{track}",                 # track number
@@ -56,15 +56,18 @@ tracks.split(/\n/).each do |track|
                  "-o ./#{dir}/#{filename}.mp4", # output file name
                  "-w 640",                      # nominal width
                  "--display-width 640",         # display width
-                 "--subtitle 4",                # caption stream 4
+                 "--all-subtitles",             # get all captions
         ].join(' ')
         system(cmd)
+
+        # Ffmpeg extracts subtitles
         cmd = [
             "ffmpeg",
                 "-y",                           # overwrite
                 "-hide_banner",                 # less verbose
                 "-i ./#{dir}/#{filename}.mp4",  # input file
-                "-map 0:s:0 -c:s text",         # first subtitle stream
+                # TODO: better way to select correct subtitle stream
+                "-map 0:s:3 -c:s text",         # select subtitle stream
                 "./#{dir}/#{filename}.srt",     # output file
         ].join(' ')
         system(cmd)
