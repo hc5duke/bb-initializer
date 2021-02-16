@@ -57,18 +57,16 @@ tracks.split(/\n/).each do |track|
                  "-w 640",                      # nominal width
                  "--display-width 640",         # display width
                  "--subtitle 4",                # caption stream 4
-        ]
-        puts cmd
-#         system(cmd.join(' ')
+        ].join(' ')
+        system(cmd)
         cmd = [
             "ffmpeg",
                 "-y",                           # overwrite
                 "-hide_banner",                 # less verbose
                 "-i ./#{dir}/#{filename}.mp4",  # input file
                 "-map 0:s:0 -c:s text",         # first subtitle stream
-                "./#{dir}/#{dvd}-#{track}.srt", # output file
-        ]
-        puts cmd
-#         system(cmd.join(' ')
+                "./#{dir}/#{filename}.srt",     # output file
+        ].join(' ')
+        system(cmd)
     end
 end
