@@ -14,6 +14,10 @@ video and srt extractor
 
 - DVD volume
 
+or
+
+- MKV videos
+
 ### Output:
 
 - video chapters (no audio)
@@ -26,9 +30,6 @@ video and srt extractor
     - string
     - Volume name
     - Uses case-ignore grep, i.e. "ABC|DEF" will match /Volume/ABC_1 and /Volume/DEF_2 (but only the first one will run)
-  - `SRT`
-    - number
-    - subtitle stream
   - `MINLEN`
     - number (in seconds)
     - default: 10 minutes
@@ -40,8 +41,15 @@ video and srt extractor
     - episode number to call first track
     - on subsequent tracks, episode number will increment by 1
 
+  - Alternately:
+  - `DIR`
+    - string
+    - dir of MKV files
+    - all other env vars are ignored
+
 ### Example usage:
 
 ```bash
 $ SEASON=3 EPISODE=10 VOLUME=KOTH make
+$ DIR=./Daria make
 ```
